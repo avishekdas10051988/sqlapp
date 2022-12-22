@@ -1,6 +1,13 @@
 using sqlapp.Services;
 
+var connectionString = "Endpoint=https://featureapp1.azconfig.io;Id=+adz-l9-s0:Is5GW4O+s55KJ2pftH4r;Secret=7O98CYLxilXCMxqTgaBNUlxvqKh3Zxl2WN6k1Q3BpXk=";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureAppConfiguration(builder =>
+{
+    builder.AddAzureAppConfiguration(connectionString);
+});
 
 builder.Services.AddTransient<IProductService, ProductService>();
 

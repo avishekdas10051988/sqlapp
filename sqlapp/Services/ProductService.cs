@@ -16,7 +16,7 @@ namespace sqlapp.Services
 
         private SqlConnection GetConnection()
         {
-            return new SqlConnection(_configuration.GetConnectionString("ConnectionString"));
+            return new SqlConnection(_configuration["ConnectionString"]);
         }
 
         public List<Product> GetProducts()
