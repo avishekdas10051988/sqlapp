@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
+using Newtonsoft.Json;
 using sqlapp.Models;
 using System.Data.SqlClient;
+using System.Text.Json.Serialization;
 
 namespace sqlapp.Services
 {
@@ -35,31 +37,17 @@ namespace sqlapp.Services
             return new SqlConnection(_configuration["ConnectionString"]);
         }
 
-        public List<Product> GetProducts()
+        public async Task<List<Product>> GetProducts()
         {
-            SqlConnection sqlConnection = GetConnection();
-
-            List<Product> _listProducts = new List<Product>();
-
-            string statement = "Select ProductID, ProductName, Quantity from Products";
-
-            sqlConnection.Open();
-
-            SqlCommand cmd = new SqlCommand(statement, sqlConnection);
-
-            using (SqlDataReader rd = cmd.ExecuteReader())
+            string functionUrl = "https://function204.azurewebsites.net/api/GetProducts?code=BJaFlwBGnKkERqbAytfV1rTwBwZ0Mh1S0wT2L7wIP0piAzFu1r1A4A==";
+            using (HttpClient client = new HttpClient())
             {
-                while (rd.Read())
-                {
-                    Product product = new Product();
-                    product.ProductID = rd.GetInt32(0);
-                    product.ProductName = rd.GetString(1);
-                    product.Quantity = rd.GetInt32(2);
-                    _listProducts.Add(product);
-                }
+                HttpResponseMessage httpResponse = await client.GetAsync(functionUrl);
+
+                string content = await httpResponse.Content.ReadAsStringAsync();
+
+                return JsonConvert.DeserializeObject<List<Product>>(content);
             }
-            sqlConnection.Close();
-            return _listProducts;
         }
     }
 }

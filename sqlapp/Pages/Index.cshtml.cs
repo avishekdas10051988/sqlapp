@@ -20,7 +20,7 @@ namespace sqlapp.Pages
         public void OnGet()
         {
             isBeta = _productService.IsBeta().Result;
-            products = _productService.GetProducts();
+            products = _productService.GetProducts().GetAwaiter().GetResult();
         }
     }
 }
