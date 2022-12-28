@@ -15,6 +15,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddFeatureManagement();
+builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
