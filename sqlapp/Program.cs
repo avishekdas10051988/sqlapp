@@ -1,9 +1,16 @@
 using Microsoft.FeatureManagement;
 using sqlapp.Services;
+using StackExchange.Redis;
 
 var connectionString = "Endpoint=https://featureapp1.azconfig.io;Id=+adz-l9-s0:Is5GW4O+s55KJ2pftH4r;Secret=7O98CYLxilXCMxqTgaBNUlxvqKh3Zxl2WN6k1Q3BpXk=";
 
+string redisString = "appcache204.redis.cache.windows.net:6380,password=7x8b62MrqFS623pGgILs9ihRKZeOlP2tKAzCaJOFW34=,ssl=True,abortConnect=False";
+var multiplexer = ConnectionMultiplexer.Connect(redisString);
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
+
 
 builder.Host.ConfigureAppConfiguration(builder =>
 {
